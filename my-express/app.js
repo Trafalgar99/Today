@@ -16,7 +16,7 @@ app.get("/login", function (req, res) {
   });
 });
 app.get("/", function (req, res) {
-  res.send("首页");
+  res.send("index");
 });
 app.get("/news", function (req, res) {
   res.send("news");

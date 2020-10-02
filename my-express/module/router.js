@@ -19,7 +19,7 @@ function getFileMime(extname) {
 function initStatic(req, res, staticPath) {
   //获取地址
   let pathname = url.parse(req.url).pathname;
-  pathname = pathname == "/" ? "index/html" : pathname;
+  pathname = pathname == "/" ? "/index.html" : pathname;
   let extname = path.extname(pathname);
   //通过fs模块读取文件
   if (pathname != "favicon.ico") {
@@ -30,7 +30,9 @@ function initStatic(req, res, staticPath) {
         res.writeHead(200, { "Content-Type": `${mime};charset='utf-8'` });
         res.end(data);
       }
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 
@@ -67,6 +69,7 @@ let server = () => {
         });
       }
     } else {
+      console.log(404);
       res.writeHead(404, { "Content-Type": "text/html;charset='utf-8'" });
       res.end("not exist");
     }
