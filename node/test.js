@@ -1,4 +1,3 @@
-const routers = require("routers");
+const url = require("url");
 
-let x = routers.getFileMime(".txt");
-console.log(x);
+console.log(url.parse("http://www.baodu.com/login.html"));
