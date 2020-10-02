@@ -1,0 +1,33 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+div {
+  width: 100px;
+  height: 100px;
+  background-color: #f9ca24;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+  transition: all 0.5s;
+}
+div:hover {
+  /* transition: all 0.5s; */
+  transform: rotateZ(-45deg);
+  width: 120px;
+  height: 120px;
+  border: solid 3px #f0932b;
+}
+span {
+  transition: all 0.5s;
+}
+div:hover > span {
+  /* transition: all 0.5s; */
+
+  transform: rotateZ(45deg);
+}
