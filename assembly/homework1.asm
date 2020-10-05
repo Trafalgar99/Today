@@ -163,11 +163,23 @@ JUD: DJNZ R2 LOOP
 /*
 7.统计P1口输入的数串中正数、负数和零的个数。
 */
-
+...
 /*
 8.试编写程序，统计内部RAM的20H~50H单元中出现00H的次数，并将统计结果存
 入51H单元。
 */
+    ORG 0000H
+    MOV R0, #20H
+    MOV R2, #30
+    MOV R3, #0
+    
+LOOP: MOV A, @R0
+    INC R0
+    CJNE A, #00H, CMP
+    INC R3
+CMP: DJNZ R2, LOOP
+    MOV 51H, R3
+    END
 
 /*
 9.试编写若累加器A内容分别满足以下条件则程序转到LABEL处的程序。
@@ -181,6 +193,18 @@ JUD: DJNZ R2 LOOP
 10.若在ROM中2000H单元开始存有一数据表，每一数据占有二个单元，共有127个
 数据。要求按存于片内RAM30H单元中的给定数据（00H~7FH)查表，并将结果存入片内RAM40H、41H单元。
 */
+    ORD 0000H
+    MOV DPTR, #2000H
+    MOV R0, #30H
+
+    MOV A, @R0
+    MOVC A, @A+DPTR
+    MOV 40H, A
+    INC DPTR
+    MOV A, @R0
+    MOVC A, @A+DPTR
+    MOV 41H, A
+    END
 
 /*
 11.试编写程序，将累加器A中的低4位送外部RAM7AH单元，将累加器A中的高4
@@ -188,6 +212,44 @@ JUD: DJNZ R2 LOOP
 状态为“1”，内部RAM10H单元加1,如果所读的状态为“0”，内部RAM11H单元加1.
 采用软件方法实现定时。
 */
+    ORG 0000H
+    MOV B, #10H     ;基数
+    MOV R0, #7AH
+    MOV R1, #7BH
+    MOV SP, #60H
+
+    PUSH A  ; 清零
+    MOV A, #00H
+    MOVX @R0, A
+    MOVX @R1, A
+    POP A
+
+    DIV A B ; 取位
+    MOVX @R1, A
+    MOV A, B
+    MOVX @R0, A
+    END
+--------------------------------------
+    ORG 0000H
+    MOV R0, #10H
+    MOV R1, #11H
+    MOV SP, #60H
+
+SEC: LCALL DEL
+    MOV C, P1.0
+    JC TAG1
+    INC @R1
+    SJMP 
+TAG1: INC @R0
+TRANS: LJMP SEC
+
+DEL: MOV R7, #20
+DEL3: MOV R6, #200
+DEL2: MOV R5, #125
+DEL1: DJNZ R5, DEL1
+    DJNZ R6, DEL2
+    DJNZ R7, DEL3
+    RET
 
 /*
 12.试编写程序，将两双字节压缩的BCD码数相加，两待加数分别按先低后高原则分别
