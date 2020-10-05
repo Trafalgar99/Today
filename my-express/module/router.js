@@ -19,7 +19,7 @@ function getFileMime(extname) {
 function initStatic(req, res, staticPath) {
   //获取地址
   let pathname = url.parse(req.url).pathname;
-  pathname = pathname == "/" ? "/index.html" : pathname;
+  // pathname = pathname == "/" ? "/index.html" : pathname;
   let extname = path.extname(pathname);
   //通过fs模块读取文件
   if (pathname != "favicon.ico") {
