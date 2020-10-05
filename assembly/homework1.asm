@@ -38,26 +38,128 @@ LOOP1: DJNZ R1, LOOP2
 /*
 1.试编写程序，将内部RAM20H~80H单元的数据传送到外部以3000H为首址的存储区。
 */
+    ORG 0000H
+    MOV R0, #20H
+    MOV DPTR, #3000H
+
+LOOP: MOV A, @R0
+    MOVX @DPTR, A
+    INC R0
+    INC DPTR
+    CJNE R0, #80H, LOOP
+    END
 
 /*
 2.试编写程序，将ROM从2000H单元开始存放的100个数据按序传送到外部RAM00H开始的单元中。
 */
-
+    ORG 0000H
+    MOV DPTR, #2000H
+    MOV R0, #00H
+    MOV R1, #100
+    CLR A
+LOOP: MOVC A, @A+DPTR
+    MOVX @R0, A
+    INC R0
+    INC DPTR
+    DJNZ R1, LOOP
+    END
 /*
 3.从内部RAM40H单元开始存有20个带符号数，把正数传送到外部RAM4000H开始的单元，
 负数传送到外部RAM4050H开始的单元，零不传送。
 */
+    ORG 0000H
+    MOV SP, #60H
+    MOV P2, #40H
+    MOV R0, #00H
+    PUSH R0  ; 保存pos地址
+    MOV R0, #40H
+    MOV R1, #50H
+    MOV R2, #20
+                ; R0->内RAM地址，POS地址； R1->NEG地址； R2->次数
+
+MAIN: MOV A, @R0
+    INC R0
+    CLR C
+    CJNE A, #0, LOOP
+    LJMP CMP
+LOOP: JC NEG
+POS: POP R4     ;R4临时保存一下pos时的目标地址
+    PUSH R0     ; 保存内RAM值
+
+    PUSH A      ;通过A将R4送入R0，A的值有效，要保存
+    MOV A, R4
+    MOV R0, A
+    POP A
+
+    MOVX @R0, A
+    INC RO
+
+    POP R4  ; 拿出内RAM地址
+    PUSH R0   ; 保存 pos地址
+
+    MOV A, R4
+    MOV R0, A   ; 取内RAM地址给R0
+
+    DJNZ R2, MAIN
+    LJMP STOP
+NEG: MOVX @R1, A
+    INC R1
+CMP: DJNZ R2, MAIN
+STOP:SJMP STOP
 
 /*
-5.外部RAM中有一数据块，存有若于字符数据，首址为SOUCE(8位）。要求将该数
+4.将片内RAM30H~60H单元的数据块全部搬迁到片外RAM1000H~1030H区域，并
+将原数据区全部清零。
+*/
+    ORG 0000H
+    MOV DPTR, #1000H
+    MOV R0, #30H
+    MOV R2, #30
+
+LOOP: MOV A, @R0
+    MOVX @DPTR, A 
+    MOV @R0, #00H
+    INC R0
+    INC DPTR
+
+    DJNZ R2, LOOP
+    END
+/*
+5.外部RAM中有一数据块，存有若干字符数据，首址为SOUCE(8位）。要求将该数
 据块传送到内部RAM从DIST开始的区域，直到遇到字符“$”时为止。
 */
+    ORG 0000H
+    MOV P2, #00H
+    MOV R0, #SOUCE
+    MOV R1, #DIST
 
+MAIN: MOVX A, @R0
+    INC R0
+    CJNE A, #24H, LOOP 
+    LJMP STOP
+LOOP: MOV @R1, A
+    INC R1
+    LJMP MAIN
+STOP: SJMP STOP
 /*
 6.设有100个无符号数，连续存放在以2000H为首地址的存储区中，试统计奇数与偶
 数的个数。
 */
+    ORG 0000H
+    MOV DPTR, #2000H
+    MOV R2, #100
+    MOV R3, #0 ;JI
+    MOV R4, #0  ;OU
 
+LOOP: MOVX A, @DPTR
+    INC DPTR
+    RRC A ;
+    JC JI
+    INC R4
+    LJMP JUDGE
+JI: INC R3
+JUD: DJNZ R2 LOOP
+    END
 /*
 7.统计P1口输入的数串中正数、负数和零的个数。
 */
