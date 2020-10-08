@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      span {
+        display: inline-block;
+        /* border: 1px solid blue; */
+        width: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2em;
+        border-top: 1px black solid;
+        border-bottom: 1px black solid;
+        height: 38px;
+      }
+      div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      button {
+        width: 80px;
+        height: 40px;
+        /* border: 1px solid red; */
+      }
+      button:nth-child(1) {
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+      }
+      button:nth-child(3) {
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="bar">
+      <button @click="dec">-</button><span>{{number}}</span
+      ><button @click="add">+</button>
+    </div>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.common.dev.js"></script>
+  <script>
+    let app = new Vue({
+      el: "#bar",
+      data: {
+        number: 0,
+      },
+      methods: {
+        add: function () {
+          this.number += this.number > 9 ? (alert("overflow"), 0) : 1;
+        },
+        dec: function () {
+          this.number -= this.number < 1 ? (alert("overflow"), 0) : 1;
+        },
+      },
+    });
+  </script>
+</html>
