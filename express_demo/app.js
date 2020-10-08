@@ -1,11 +1,29 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const session = require("express-session");
+const MongoStore = require("connect-mongo")(session);
 const app = express();
+const login = require("./routes/login");
 
 //配置cookie-parser中间件
 app.use(cookieParser());
-
+//配置session中间件
+app.use(
+  session({
+    secret: "this is session", // 服务端生成session签名
+    resave: false, // 强制存储session即使它没有发生变化
+    saveUninitialized: true, //强制将未初始化的session存储
+    cookie: {
+      //session是基于cookie
+      secure: false, //true代表只有https协议才能访问cookie
+      maxAge: 1000 * 60 * 30, //设置session的过期时间
+    },
+    store: new MongoStore({
+      url: "mongodb://trafal:991220@localhost:27017/trafal",
+    }),
+  })
+);
 //应用级中间件（用于权限判断）
 app.use((req, res, next) => {
   // console.log(new Date());
@@ -25,6 +43,10 @@ app.get("/", (req, res) => {
   let title = "abc";
   res.render("index", { title: title }); //会默认到views寻找
 });
+
+//挂载login模块
+app.use("/login", login);
+
 app.get("/article", (req, res) => {
   //获取设定好的cookie
   let username = req.cookies.username;
@@ -32,31 +54,17 @@ app.get("/article", (req, res) => {
   res.send("新闻页面");
 });
 app.get("/register", (req, res) => {
+  //设置session
+  req.session.username = "trafal";
   res.send("注册");
 });
-app.get("/login", (req, res) => {
-  res.render("login", {}, function (err, data) {
-    if (err) console.log(err);
-    res.send(data);
-  });
-});
-app.post("/doLogin", (req, res) => {
-  res.render("doLogin", {}, function (err, data) {
-    res.send(data);
-  });
-  console.log(req.body);
-});
-app.put("/put", (req, res) => {
-  console.log("修改");
-  res.send("修改");
-});
-app.delete("/delete", (req, res) => {
-  console.log("删除");
-  res.send("删除");
-});
 
-app.get("/admin/user", (req, res) => {
-  res.send("admin user");
+app.get("/admin", (req, res) => {
+  //获取session
+  if (req.session.username) res.send(req.session.username + "okokokok");
+  else {
+    res.send("fail");
+  }
 });
 //动态路由
 app.get("/article/:id", (req, res) => {
@@ -71,6 +79,7 @@ app.get("/product", (req, res) => {
   console.log(query);
   res.send("product");
 });
+
 //错误处理中间件 (要放在最后)
 app.use((req, res, next) => {
   res.status(404).send("404");
