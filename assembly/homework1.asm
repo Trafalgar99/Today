@@ -46,7 +46,11 @@ LOOP: MOV A, @R0
     MOVX @DPTR, A
     INC R0
     INC DPTR
-    CJNE R0, #80H, LOOP
+    CJNE R0, #80H, 
+    
+    MOV A, @R0  ; 如果#80H也被包括，则加上这两句
+    MOVX @DPTR, A
+    
     END
 
 /*
@@ -56,7 +60,6 @@ LOOP: MOV A, @R0
     MOV DPTR, #2000H
     MOV R0, #00H
     MOV R1, #100
-    CLR A
 LOOP: MOVC A, @A+DPTR
     MOVX @R0, A
     INC R0
@@ -85,27 +88,24 @@ MAIN: MOV A, @R0
 LOOP: JC NEG
 POS: POP R4     ;R4临时保存一下pos时的目标地址
     PUSH R0     ; 保存内RAM值
-
-    PUSH A      ;通过A将R4送入R0，A的值有效，要保存
-    MOV A, R4
-    MOV R0, A
-    POP A
-
+    LCALL R42R0
     MOVX @R0, A
     INC RO
-
     POP R4  ; 拿出内RAM地址
     PUSH R0   ; 保存 pos地址
-
-    MOV A, R4
-    MOV R0, A   ; 取内RAM地址给R0
-
+    LCALL R42R0
     DJNZ R2, MAIN
     LJMP STOP
 NEG: MOVX @R1, A
     INC R1
 CMP: DJNZ R2, MAIN
 STOP:SJMP STOP
+R42R0: PUSH A      ;通过A将R4送入R0，A的值有效，要保存
+    MOV A, R4
+    MOV R0, A
+    POP A
+    RET
+
 
 /*
 4.将片内RAM30H~60H单元的数据块全部搬迁到片外RAM1000H~1030H区域，并
@@ -128,6 +128,8 @@ LOOP: MOV A, @R0
 5.外部RAM中有一数据块，存有若干字符数据，首址为SOUCE(8位）。要求将该数
 据块传送到内部RAM从DIST开始的区域，直到遇到字符“$”时为止。
 */
+    SOUCE EQU XXH
+    DIST EQU YYH
     ORG 0000H
     MOV P2, #00H
     MOV R0, #SOUCE
@@ -136,10 +138,10 @@ LOOP: MOV A, @R0
 MAIN: MOVX A, @R0
     INC R0
     CJNE A, #24H, LOOP 
-    LJMP STOP
+    SJMP STOP
 LOOP: MOV @R1, A
     INC R1
-    LJMP MAIN
+    SJMP MAIN
 STOP: SJMP STOP
 /*
 6.设有100个无符号数，连续存放在以2000H为首地址的存储区中，试统计奇数与偶
@@ -148,17 +150,17 @@ STOP: SJMP STOP
     ORG 0000H
     MOV DPTR, #2000H
     MOV R2, #100
-    MOV R3, #0 ;JI
-    MOV R4, #0  ;OU
+    MOV R3, #0 ;ODD
+    MOV R4, #0  ;EVEN
 
 LOOP: MOVX A, @DPTR
     INC DPTR
     RRC A ;
-    JC JI
+    JC ODD
     INC R4
     LJMP JUDGE
-JI: INC R3
-JUD: DJNZ R2 LOOP
+ODD: INC R3
+JUDGE: DJNZ R2 LOOP
     END
 /*
 7.统计P1口输入的数串中正数、负数和零的个数。
