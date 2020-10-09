@@ -213,19 +213,22 @@ CMP: DJNZ R2, LOOP
     ORG 0000H
     MOV DPTR, #2000H
     MOV R0, #30H
+    MOV SP #60H
 
     MOV A, @R0
+    RL A
+    PUSH A
     MOVC A, @A+DPTR
     MOV 40H, A
     INC DPTR
-    MOV A, @R0
+    POP A
     MOVC A, @A+DPTR
     MOV 41H, A
     END
 
 /*
 11.试编写程序，将累加器A中的低4位送外部RAM7AH单元，将累加器A中的高4
-位送外部RAM7BH单元，7AH、7BH单元高4位均清0。每隔1s读一次P1.0,如果所读的
+位送外部RAM7BH单元，7AH、7BH单元高4位均清0。/每隔1s读一次P1.0,如果所读的
 状态为“1”，内部RAM10H单元加1,如果所读的状态为“0”，内部RAM11H单元加1.
 采用软件方法实现定时。
 */
@@ -278,3 +281,5 @@ DEL1: DJNZ R5, DEL1
 
 ------------------------------------------------------------------------------------
 > AUTHOR: WKD
+> OPTIMIZATION: 10.10
+    > DESCRIBE: 修改了部分错误，对某些程序进行了优化
