@@ -5,6 +5,10 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 const app = express();
 const login = require("./routes/login");
+const register = require("./routes/register");
+const admin = require("./routes/admin");
+const main = require("./routes/main");
+const upload = require("./routes/upload");
 
 //配置cookie-parser中间件
 app.use(cookieParser());
@@ -24,61 +28,20 @@ app.use(
     }),
   })
 );
-//应用级中间件（用于权限判断）
-app.use((req, res, next) => {
-  // console.log(new Date());
-  next(); //继续向下匹配
-});
 //配置第三方中间件
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-app.set("view engine", "ejs"); //配置模板引擎，只需要安装，不需要引入即可使用
+//配置模板引擎，只需要安装，不需要引入即可使用
+app.set("view engine", "ejs");
 //配置静态web目录 （在获得路径时先查看所设置的静态目录有没有所需要的文件，如果没有才向下继续查询）
 app.use(express.static("static"));
 
-app.get("/", (req, res) => {
-  //在首页里设置cookie
-  res.cookie("username", "Trafal", { maxAge: 1000 * 60 * 60 });
-  let title = "abc";
-  res.render("index", { title: title }); //会默认到views寻找
-});
-
-//挂载login模块
+//挂载模块
+app.use("/", main);
 app.use("/login", login);
-
-app.get("/article", (req, res) => {
-  //获取设定好的cookie
-  let username = req.cookies.username;
-  console.log(username);
-  res.send("新闻页面");
-});
-app.get("/register", (req, res) => {
-  //设置session
-  req.session.username = "trafal";
-  res.send("注册");
-});
-
-app.get("/admin", (req, res) => {
-  //获取session
-  if (req.session.username) res.send(req.session.username + "okokokok");
-  else {
-    res.send("fail");
-  }
-});
-//动态路由
-app.get("/article/:id", (req, res) => {
-  let id = req.params; //动态路由的参数（id）
-  console.log(id);
-  res.send("动态路由");
-});
-
-//获取get传值
-app.get("/product", (req, res) => {
-  query = req.query;
-  console.log(query);
-  res.send("product");
-});
+app.use("/register", register);
+app.use("/admin", admin);
+app.use("/upload", upload);
 
 //错误处理中间件 (要放在最后)
 app.use((req, res, next) => {

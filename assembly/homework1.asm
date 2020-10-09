@@ -208,7 +208,7 @@ CMP: DJNZ R2, LOOP
 10.若在ROM中2000H单元开始存有一数据表，每一数据占有二个单元，共有127个
 数据。要求按存于片内RAM30H单元中的给定数据（00H~7FH)查表，并将结果存入片内RAM40H、41H单元。
 */
-    ORD 0000H
+    ORG 0000H
     MOV DPTR, #2000H
     MOV R0, #30H
 
@@ -254,7 +254,7 @@ SEC: LCALL DEL
     MOV C, P1.0
     JC TAG1
     INC @R1
-    SJMP 
+    SJMP SEC
 TAG1: INC @R0
 TRANS: LJMP SEC
 
