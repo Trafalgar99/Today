@@ -31,7 +31,7 @@
               <li class="todo" v-for="(item,index) in list">
                 <div class="view">
                   <span class="index">{{index+1 }}</span> <label>{{item}}</label>
-                  <button class="destroy"></button>
+                  <button class="destroy" @click='remove(index)'></button>
                 </div>
               </li>
               
@@ -39,8 +39,8 @@
           </section>
           <!-- 统计和清空 -->
           <footer class="footer">
-            <span class="todo-count"> <strong>1</strong> items left </span>
-            <button class="clear-completed">
+            <span class="todo-count" v-if="list.length"> <strong>{{list.length}}</strong> items left </span>
+            <button class="clear-completed" @click="clear">
               Clear
             </button>
           </footer>
@@ -65,6 +65,13 @@
                 methods:{
                     add:function(){
                         this.list.push(this.inputValue);
+                        this.inputValue = '';
+                    },
+                    remove:function(index){
+                      this.list.splice(index,1);
+                    },
+                    clear:function(){ 
+                      this.list=[];
                     }
                 }
             })
