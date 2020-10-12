@@ -11,7 +11,7 @@ LOOP: MOV R3, A
     CLR C
     MOV A, @R1  ; 将下一个数送入A
     SUBB A, R3
-    JNC LOOP1   ; 后一个数大于前一个数
+    JNC LOOP1   ; 后一个数大于前一个数 A>=R3
     SETB F0     ; 满足交换条件 
     MOV A, R3
     XCH A, @R1
