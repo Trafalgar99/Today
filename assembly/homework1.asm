@@ -25,9 +25,9 @@ LOOP: MOV A, @R0
 
 LOOP2:  INC R0
     CLR C
-    PUSH A
+    PUSH ACC
     SUBB A, @R0
-    POP A
+    POP ACC
     JNC LOOP1
     XCH A, @R0
 
@@ -73,8 +73,8 @@ LOOP: MOVC A, @A+DPTR
     ORG 0000H
     MOV SP, #60H
     MOV P2, #40H
-    MOV R0, #00H
-    PUSH R0  ; 保存pos地址
+    MOV B,  #00H
+    PUSH B  ; 保存pos地址
     MOV R0, #40H
     MOV R1, #50H
     MOV R2, #20
@@ -86,24 +86,24 @@ MAIN: MOV A, @R0
     CJNE A, #0, LOOP
     LJMP CMP
 LOOP: JC NEG
-POS: POP R4     ;R4临时保存一下pos时的目标地址
+POS: POP B     ;B临时保存一下pos时的目标地址
     PUSH R0     ; 保存内RAM值
-    LCALL R42R0
+    LCALL B2R0
     MOVX @R0, A
     INC RO
-    POP R4  ; 拿出内RAM地址
+    POP B  ; 拿出内RAM地址
     PUSH R0   ; 保存 pos地址
-    LCALL R42R0
+    LCALL B2R0
     DJNZ R2, MAIN
     LJMP STOP
 NEG: MOVX @R1, A
     INC R1
 CMP: DJNZ R2, MAIN
 STOP:SJMP STOP
-R42R0: PUSH A      ;通过A将R4送入R0，A的值有效，要保存
-    MOV A, R4
+B2R0: PUSH ACC      ;通过A将B送入R0，A的值有效，要保存
+    MOV A, B
     MOV R0, A
-    POP A
+    POP ACC
     RET
 
 
@@ -217,11 +217,11 @@ CMP: DJNZ R2, LOOP
 
     MOV A, @R0
     RL A
-    PUSH A
+    PUSH ACC
     MOVC A, @A+DPTR
     MOV 40H, A
     INC DPTR
-    POP A
+    POP ACC
     MOVC A, @A+DPTR
     MOV 41H, A
     END
@@ -238,11 +238,11 @@ CMP: DJNZ R2, LOOP
     MOV R1, #7BH
     MOV SP, #60H
 
-    PUSH A  ; 清零
+    PUSH ACC  ; 清零
     MOV A, #00H
     MOVX @R0, A
     MOVX @R1, A
-    POP A
+    POP ACC
 
     DIV A B ; 取位
     MOVX @R1, A
