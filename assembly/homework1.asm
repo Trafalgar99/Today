@@ -88,7 +88,7 @@ MAIN: MOV A, @R0
 LOOP: JC NEG
 POS: POP B     ;B临时保存一下pos时的目标地址
     PUSH R0     ; 保存内RAM值
-    LCALL B2R0
+    LCALL B2R0  ; 注意：栈顶元素已经被改变 ---> PC
     MOVX @R0, A
     INC RO
     POP B  ; 拿出内RAM地址
@@ -281,5 +281,5 @@ DEL1: DJNZ R5, DEL1
 
 ------------------------------------------------------------------------------------
 > AUTHOR: WKD
-> OPTIMIZATION: 10.10
+> OPTIMIZATION: 10.16
     > DESCRIBE: 修改了部分错误，对某些程序进行了优化
