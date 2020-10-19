@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="./vue.js"></script>
+    <script src="./vue-router.js"></script>
+  </head>
+  <body>
+    <div id="hd">
+      <router-view></router-view>
+    </div>
+  </body>
+  <script type="text/x-template" id="home">
+    <div>
+        <li v-for='item in data'>
+            <router-link :to="{name:'content',params:{id:item.id}}">{{item.title}}</router-link>
+        </li>
+    </div>
+  </script>
+  <script type="text/x-template" id="content">
+    <div>
+        <h1>{{field.title}}</h1>
+        <p>{{field.content}}</p>
+    </div>
+  </script>
+  <script>
+    let data = [
+      { title: "xxxx1", id: 1, content: "xxxx" },
+      { title: "yyyy1", id: 2, content: "yyyy" },
+    ];
+    const home = {
+      template: "#home",
+      data() {
+        return { data };
+      },
+    };
+    const content = {
+      template: "#content",
+      data() {
+        return { field: {} };
+      },
+      mounted() {
+        // alert(data[this.$route.params.id - 1].title);
+        this.field = data[this.$route.params.id - 1];
+      },
+    };
+    let routes = [
+      { path: "/", component: home },
+      { path: "/content/:id?", component: content, name: "content" },
+    ];
+    let router = new VueRouter({
+      routes,
+    });
+    new Vue({
+      el: "#hd",
+      router,
+    });
+  </script>
+</html>

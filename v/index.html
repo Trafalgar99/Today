@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="./vue.js"></script>
+    <script src="./vuex.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <lists></lists>
+    </div>
+  </body>
+  <script type="text/x-template" id="Lists">
+    <div><h1>
+      总价: {{totalPrice}}
+    </h1></div>
+  </script>
+  <script>
+    let store = new Vuex.Store({
+      state: {
+        totalPrice: 100,
+      },
+    });
+    let Lists = {
+      template: "#Lists",
+      computed: {
+        totalPrice() {
+          return this.$store.state.totalPrice;
+        },
+      },
+    };
+    var app = new Vue({
+      el: "#app",
+      store,
+      components: { Lists },
+    });
+  </script>
+</html>
