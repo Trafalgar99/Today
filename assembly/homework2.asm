@@ -1,0 +1,13 @@
+/*
+11.
+*/
+    ORG 0000H
+    MOV TMOD, #20H
+    MOV TL1, #9CH
+    MOV TH1, #9CH
+    SETB TR1
+    SETB P1.1
+LOOP: JBC TF1, TRANS
+    SJMP LOOP
+TRANS: CPLP1.1 ;常数自动重装入
+    SJMP LOOP
