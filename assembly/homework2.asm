@@ -9,5 +9,5 @@
     SETB P1.1
 LOOP: JBC TF1, TRANS
     SJMP LOOP
-TRANS: CPLP1.1 ;常数自动重装入
+TRANS: CPL P1.1 ;常数自动重装入
     SJMP LOOP

@@ -1,30 +1,4 @@
-    ORG 0000H
-BEGIN: MOV A, #81H
-    MOV R6, #4
-
-LOOP: MOV P1, A
-    LCALL DELAY
-    LCALL TOMID
-    DJNZ R6, NEXT
-    SJMP BEGIN
-	push a
-NEXT: SJMP LOOP
-
-
-TOMID: PUSH A
-    ANL A, #80H
-    RR A
-    MOV R7, A
-    POP A
-    ANL A, #08H
-    RL A
-    ADD A, R7
-    RET 
-DELAY:MOV R7, #20
-DEL3: MOV R6, #200
-DEL2: MOV R5, #125
-DEL1: DJNZ R5, DEL1
-    DJNZ R6, DEL2
-    DJNZ R7, DEL3
-    RET
-    END 
+	ORG 0000H
+	MOV A, #0
+	PUSH A
+	SJMP $

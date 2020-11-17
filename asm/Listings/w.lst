@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  W                                                                    10/23/2020 14:01:52 PAGE     1
+A51 MACRO ASSEMBLER  W                                                                    11/03/2020 19:51:08 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -7,43 +7,14 @@ ASSEMBLER INVOKED BY: D:\c51keil\C51\BIN\A51.EXE w.asm SET(SMALL) DEBUG PRINT(.\
 
 LOC  OBJ            LINE     SOURCE
 
-0000                   1         ORG 0000H
-0000 7481              2     BEGIN: MOV A, #81H
-0002 7E04              3         MOV R6, #4
-                       4     
-0004 F590              5     LOOP: MOV P1, A
-0006 12001B            6         LCALL DELAY
-0009 120012            7         LCALL TOMID
-000C DE02              8         DJNZ R6, NEXT
-000E 80F0              9         SJMP BEGIN
-0010                  10             push a
+0000                   1             ORG 0000H
+0000 7400              2             MOV A, #0
+0002                   3             PUSH A
 *** ______________________________________^
-*** ERROR #A22 IN 10 (w.asm, LINE 10): EXPRESSION TYPE DOES NOT MATCH INSTRUCTION
-0010 80F2             11     NEXT: SJMP LOOP
-                      12     
-                      13     
-0012                  14     TOMID: PUSH A
-*** _____________________________________^
-*** ERROR #A22 IN 14 (w.asm, LINE 14): EXPRESSION TYPE DOES NOT MATCH INSTRUCTION
-0012 5480             15         ANL A, #80H
-0014 03               16         RR A
-0015 FF               17         MOV R7, A
-0016                  18         POP A
-*** _________________________________^
-*** ERROR #A22 IN 18 (w.asm, LINE 18): EXPRESSION TYPE DOES NOT MATCH INSTRUCTION
-0016 5408             19         ANL A, #08H
-0018 23               20         RL A
-0019 2F               21         ADD A, R7
-001A 22               22         RET 
-001B 7F14             23     DELAY:MOV R7, #20
-001D 7EC8             24     DEL3: MOV R6, #200
-001F 7D7D             25     DEL2: MOV R5, #125
-0021 DDFE             26     DEL1: DJNZ R5, DEL1
-0023 DEFA             27         DJNZ R6, DEL2
-0025 DFF6             28         DJNZ R7, DEL3
-0027 22               29         RET
-                      30         END 
-A51 MACRO ASSEMBLER  W                                                                    10/23/2020 14:01:52 PAGE     2
+*** ERROR #A22 IN 3 (w.asm, LINE 3): EXPRESSION TYPE DOES NOT MATCH INSTRUCTION
+0002 80FE              4             SJMP $
+*** WARNING #A41 IN 4 (w.asm, LINE 4): MISSING 'END' STATEMENT
+A51 MACRO ASSEMBLER  W                                                                    11/03/2020 19:51:08 PAGE     2
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -51,18 +22,9 @@ SYMBOL TABLE LISTING
 
 N A M E             T Y P E  V A L U E   ATTRIBUTES
 
-BEGIN. . . . . . .  C ADDR   0000H   A   
-DEL1 . . . . . . .  C ADDR   0021H   A   
-DEL2 . . . . . . .  C ADDR   001FH   A   
-DEL3 . . . . . . .  C ADDR   001DH   A   
-DELAY. . . . . . .  C ADDR   001BH   A   
-LOOP . . . . . . .  C ADDR   0004H   A   
-NEXT . . . . . . .  C ADDR   0010H   A   
-P1 . . . . . . . .  D ADDR   0090H   A   
-TOMID. . . . . . .  C ADDR   0012H   A   
 
 
 REGISTER BANK(S) USED: 0 
 
 
-ASSEMBLY COMPLETE.  0 WARNING(S), 3 ERROR(S)
+ASSEMBLY COMPLETE.  1 WARNING(S), 1 ERROR(S)
