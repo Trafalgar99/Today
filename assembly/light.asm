@@ -65,3 +65,8 @@ DEL1: DJNZ R5, DEL1
     DJNZ R7, DEL3
     RET
     END 
+
+
+
+    //死亡考试
+    ; 我裂开了
