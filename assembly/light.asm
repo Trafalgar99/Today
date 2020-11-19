@@ -70,3 +70,4 @@ DEL1: DJNZ R5, DEL1
 
     //死亡考试
     ; 我裂开了
+    z'f'v'a'd'm
