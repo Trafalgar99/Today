@@ -1,5 +1,5 @@
 #include<iostream>
-
+#include<string>
 using namespace std;
 
 int main()
@@ -9,62 +9,45 @@ int main()
     if(s[0] == '-') cout<<'-';
     
     int pos = s.find('E');
-    int pot = s.find('.');
-    int k;
-    for(int i=pos+2;i<s.size();i++)
-        if(s[i]!='0')
-        {
-            k = i;
-            break;
-        }
+
+//     cout<<pot<<endl;
+
     int exp = 0;
-    for(int i = k;i<s.size();i++)
+    for(int i = pos+2;i<s.size();i++)
     {
-        exp = exp*10+(s[k]-'0');
+        exp = exp*10+(s[i]-'0');
+    }
+    
+    if(exp == 0)
+    {
+        for(int i=1;i<pos;i++)
+            cout<<s[i];
     }
     
     if(s[pos+1]=='+')
-    {
-        int m = pos-pot-1; //小数点后的位数
-        if(m<exp)//add 0
+    {   
+        for(int i=1;i<pos;i++)
         {
-            for(int i=1;i<pos;i++)
-            {
-                if(s[i]!='.')
-                    cout<<s[i];
-            }
-            for(int i=0;i<exp-m-1;i++)
-                cout<<'0';
-            cout<<endl;
+            if(s[i]=='.') continue;
+            cout<<s[i];
+            if(i==exp+2&&pos-3!=exp)
+                cout<<'.';
+
         }
-        else if(m==exp)
-        {
-            for(int i=1;i<pos;i++)
-            {
-                if(s[i]!='.')
-                    cout<<s[i];
-            }
-            cout<<endl;
-        }
-        else
-        {
-            for(int i=1;i<pos;i++)
-            {
-                if(i==pot+exp+1) cout<<'.';
-                if(s[i]!='.')
-                    cout<<s[i];
-            }
-        }
+        for(int i=0;i<exp-(pos-3);i++)
+        cout<<'0'<<endl;
+
     }
     else
     {
         cout<<"0.";
         for(int i = 0;i<exp-1;i++)
             cout<<'0';
-        for(int i=1;i<pos;i++)
+        cout<<s[1];
+        for(int i=3;i<pos;i++)
         {
-            if(s[i]!='.')
-                cout<<s[i];
+//             if(s[i]=='.') continue;
+            cout<<s[i];
         }
         cout<<endl;
     }
