@@ -40,8 +40,8 @@ int main()
         sort(V.begin(),V.end(),cmp);
         double total  = 0;
         for(int i=0;i<V.size();)
-        {
-            if(i+1<V.size()&&V[i].tag>V[i+1].tag)
+        { 
+            if(i+1<V.size()&&V[i].tag>V[i+1].tag) //tag的字典序  如果成功找到一对合法的时间 
             {
                 if(total == 0)
                 {
@@ -56,6 +56,7 @@ int main()
                 {
                     fenzhang += danjia[Time%1440/60];
                 }
+                
                 printf("%02d:%02d:%02d %02d:%02d:%02d %d $%.2f\n",V[i].dd,V[i].hh,V[i].mm,V[i+1].dd,V[i+1].hh,V[i+1].mm,V[i+1].t-V[i].t,fenzhang/100);
                 i+=2;
                 total += fenzhang;
